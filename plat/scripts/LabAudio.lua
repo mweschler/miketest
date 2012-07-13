@@ -179,11 +179,20 @@ end
 --gets the current volume of a group
 function _Audio.getGroupVolume(group)
 	assert(_Audio.running == true, "Audio system not initilized")
-		if not group then
-			print "Must specify a group"
-			return
-		end
+	if not group then
+		print "Must specify a group"
+		return
+	end
 	return _Audio._Volumes[group]
+end
+
+function _Audio.pauseGroup(group)
+	assert(_Audio.running == true, "Audio system not initilized")
+	for i, v in ipairs(_Audio._Playing) do
+		if v.group == group then
+			v.sound:pause()
+		end
+	end	
 end
 
 return _Audio
