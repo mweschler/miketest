@@ -195,4 +195,31 @@ function _Audio.pauseGroup(group)
 	end	
 end
 
+function _Audio.pauseLabel(label)
+	assert(_Audio.running == true, "Audio system not initilized")
+	for i, v in iparis(_Auido._Playing) do
+		if v.label == label then
+			v.sound:pause()
+		end
+	end
+end
+
+function _Audio.resumeGroup(group)
+	assert(_Audio.running == true, "Audio system not initilized")
+	for i, v in iparis(_Audio._Playing) do
+		if v.group == group and v.sound:isPaused() then
+			v.sound:play()
+		end
+	end
+end
+
+function _Audio.resumeLabel(label)
+	assert(_Audio.running == true, "Audio system not initilized")
+	for i,v in ipairs(_AUdio._Playing) do
+		if v.label == label and v.sound:isPaused() then
+			v.sound:play()
+		end
+	end
+end
+
 return _Audio
