@@ -30,14 +30,17 @@ end
 
 function _Audio._interpolateVolume(startVolume, finalVolume, startTime, totalTime)
 	local currentTime = MOAISim.getElapsedTime()
-	local iterp = totalTime / (currentTime - startTime)
+	if currentTime == startTime then
+		return startVolume
+	end
 	
+	local interp = (currentTime - startTime)/ totalTime 
 	
 	if currentTime >= (startTime + totalTime) then
 		return finalVolume
 	end
 	
-	return ((1 - iterp) * startVolume + (interp * finalVolume))
+	return ((1 - interp) * startVolume + (interp * finalVolume))
 end
 
 --removes any stoped audio
@@ -52,14 +55,23 @@ end
 function _Audio._updateFades()
 	for i, v in ipairs(_Audio._Fades) do
 		if v.fadeType == "master" then
-			local nextVolume = _Audio.interpolateVolume(
+			local nextVolume = _Audio._interpolateVolume(
 					v.startVolume, v.finalVolume, v.startTime, v.totalTime)
 			_Audio.setMasterVolume(nextVolume)
+
 			if v.finalVolume == nextVolume then
 				table.remove(_Audio._Fades, i)
 			end
 		end
-		
+		if v.fadeType == "group" then
+			local nextVolume = _Audio._interpolateVolume(
+					v.startVolume, v.finalVolume, v.startTime, v.totalTime)
+			_Audio.setGroupVolume(v.group, nextVolume)
+			
+			if v.finalVolume == nextVolume then
+				table.remove(_Audio._Fades, i)
+			end
+		end
 	end
 end
 
@@ -74,7 +86,7 @@ end
 --returns the total number of sounds playing
 function _Audio.getTotalPlaying()
 	assert(_Audio.running == true, "Audio system not initilized")
-	
+
 	return # _Audio._Playing
 end
 
@@ -132,7 +144,29 @@ function _Audio.fadeMasterVolume(volume, seconds)
 		finalVolume = volume, totalTime = seconds, startTime = MOAISim.getElapsedTime()}
 	
 	table.insert(_Audio._Fades, fadedata)
+end
+
+function _Audio.fadeGroup(group, volume, seconds)
+	assert(_Audio.running == true, "Audio system not initilized")
+	if volume < 0 or volume > 1 then
+		print "Volume out of range"
+		return
+	end
 	
+	if seconds <= 0 then
+		print "seconds must be more than 0"
+		return
+	end
+	
+	if not group then
+		print "Need to specify a group"
+		return
+	end
+
+	local fadedata = {fadeType = "group", startVolume = _Audio.getGroupVolume(group), group = group,
+		finalVolume = volume, totalTime = seconds, startTime = MOAISim.getElapsedTime()}
+		
+	table.insert(_Audio._Fades, fadedata)
 end
 
 --loads a sound to play later using the supplied group and label
@@ -246,7 +280,7 @@ end
 
 function _Audio.pauseLabel(label)
 	assert(_Audio.running == true, "Audio system not initilized")
-	for i, v in iparis(_Auido._Playing) do
+	for i, v in ipairs(_Audio._Playing) do
 		if v.label == label then
 			v.sound:pause()
 		end
@@ -255,7 +289,7 @@ end
 
 function _Audio.resumeGroup(group)
 	assert(_Audio.running == true, "Audio system not initilized")
-	for i, v in iparis(_Audio._Playing) do
+	for i, v in ipairs(_Audio._Playing) do
 		if v.group == group and v.sound:isPaused() then
 			v.sound:play()
 		end
@@ -280,7 +314,7 @@ function _Audio.stopGroup(group)
 	end
 end
 
-function _Audio.stopLabel(group)
+function _Audio.stopLabel(label)
 	assert(_Audio.running == true, "Audio system not initilized")
 	for i, v in ipairs(_Audio._Playing) do
 		if v.label == label then
