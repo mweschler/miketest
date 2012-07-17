@@ -1,7 +1,5 @@
 require "scripts/Player"
 
-
-
 gRunning = true
 
 function gameloop ()
@@ -9,5 +7,7 @@ function gameloop ()
 		coroutine.yield()
 		Audio.update()
 		player:update()
+		
+		
 	end
 end

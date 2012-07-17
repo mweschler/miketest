@@ -6,6 +6,7 @@ _Audio.running = false
 _Audio._Groups = {}
 _Audio._Volumes = {}
 _Audio._Playing = {}
+_Audio._Fades ={}
 
 --Initilizes the audio system
 function _Audio.initilize()
@@ -27,6 +28,18 @@ function _Audio._createSoundData(group, label, sound)
 	return data
 end
 
+function _Audio._interpolateVolume(startVolume, finalVolume, startTime, totalTime)
+	local currentTime = MOAISim.getElapsedTime()
+	local iterp = totalTime / (currentTime - startTime)
+	
+	
+	if currentTime >= (startTime + totalTime) then
+		return finalVolume
+	end
+	
+	return ((1 - iterp) * startVolume + (interp * finalVolume))
+end
+
 --removes any stoped audio
 function _Audio._cullPlaying()
 	for i, v in ipairs(_Audio._Playing) do
@@ -36,11 +49,26 @@ function _Audio._cullPlaying()
 	end
 end
 
+function _Audio._updateFades()
+	for i, v in ipairs(_Audio._Fades) do
+		if v.fadeType == "master" then
+			local nextVolume = _Audio.interpolateVolume(
+					v.startVolume, v.finalVolume, v.startTime, v.totalTime)
+			_Audio.setMasterVolume(nextVolume)
+			if v.finalVolume == nextVolume then
+				table.remove(_Audio._Fades, i)
+			end
+		end
+		
+	end
+end
+
 --main update function for the audio system. must be called every cycle
 function _Audio.update()
 	assert(_Audio.running == true, "Audio system not initilized")
 	
 	_Audio._cullPlaying() --remove anything finished playing
+	_Audio._updateFades() 
 end
 
 --returns the total number of sounds playing
@@ -84,6 +112,27 @@ function _Audio.getMasterVolume()
 	assert(_Audio.running == true, "Audio system not initilized")
 	
 	return MOAIUntzSystem.getVolume()
+end
+
+
+--fades the master volume to the specified volume over supplied seconds
+function _Audio.fadeMasterVolume(volume, seconds)
+	assert(_Audio.running == true, "Audio system not initilized")
+	if volume < 0 or volume > 1 then
+		print "Volume out of range"
+		return
+	end
+	
+	if seconds <= 0 then
+		print "seconds must be more than 0"
+		return
+	end
+	
+	local fadedata= { fadeType = "master", startVolume = _Audio.getMasterVolume(), 
+		finalVolume = volume, totalTime = seconds, startTime = MOAISim.getElapsedTime()}
+	
+	table.insert(_Audio._Fades, fadedata)
+	
 end
 
 --loads a sound to play later using the supplied group and label
