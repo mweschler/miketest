@@ -215,9 +215,27 @@ end
 
 function _Audio.resumeLabel(label)
 	assert(_Audio.running == true, "Audio system not initilized")
-	for i,v in ipairs(_AUdio._Playing) do
+	for i,v in ipairs(_Audio._Playing) do
 		if v.label == label and v.sound:isPaused() then
 			v.sound:play()
+		end
+	end
+end
+
+function _Audio.stopGroup(group)
+	assert(_Audio.running == true, "Audio system not initilized")
+	for i, v in ipairs(_Audio._Playing) do
+		if v.group == group then
+			v.sound:stop()
+		end
+	end
+end
+
+function _Audio.stopLabel(group)
+	assert(_Audio.running == true, "Audio system not initilized")
+	for i, v in ipairs(_Audio._Playing) do
+		if v.label == label then
+			v.sound:stop()
 		end
 	end
 end
