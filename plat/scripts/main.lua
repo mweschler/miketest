@@ -1,3 +1,8 @@
+package.path = package.path .. ";.\\gui\\?;.\\gui\\?.lua"
+local gui = require "gui/gui"
+dofile "gui/parentingfromlayout.lua"
+
+
 require "scripts/gameloop"
 DEVICE_WIDTH = 1280
 DEVICE_HEIGHT = 720
