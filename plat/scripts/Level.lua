@@ -95,7 +95,7 @@ function _Level.load(level, tileset)
 	levelProp:setLoc((level.sizeX / 2) * -1,(level.sizeY / 2) * -1)
 	
 	levelLayer:insertProp(levelProp)
-	MOAISim.pushRenderPass(levelLayer)
+	LayerManager.addLayer("level", 1, levelLayer)
 
 	--Create physics for level
 	currentWorld = MOAIBox2DWorld.new()

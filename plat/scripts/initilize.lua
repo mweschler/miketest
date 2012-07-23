@@ -1,6 +1,7 @@
 require "scripts/Player"
 Level = require "scripts/Level"
 Audio = require "scripts/LabAudio"
+LayerManager = require "scripts/layermgr"
 
 print("Begin Initilization")
 
@@ -42,7 +43,7 @@ ptex:load ( "textures/stick.png" )
 player:setTexture(ptex)
 gEntityLayer = MOAILayer.new()
 gEntityLayer:setViewport(viewport)
-MOAISim.pushRenderPass(gEntityLayer)
+LayerManager.addLayer("entity", 2, gEntityLayer)
 player:addToLayer(gEntityLayer)
 player:addToWorld(Level.getCurrentWorld())
 gEntityLayer:setBox2DWorld(Level.getCurrentWorld())
