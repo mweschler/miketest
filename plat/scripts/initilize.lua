@@ -57,4 +57,11 @@ local filesystem = require "gui/support/filesystem"
 local inputconstants = require "gui/support/inputconstants"
 
 g = gui.GUI(DEVICE_WIDTH, DEVICE_HEIGHT)
+LayerManager.addLayer("gui", 9000, g:layer())
 
+g:addToResourcePath(filesystem.pathJoin("resources", "fonts"))
+g:addToResourcePath(filesystem.pathJoin("resources", "gui"))
+g:addToResourcePath(filesystem.pathJoin("resources", "media"))
+g:addToResourcePath(filesystem.pathJoin("resources", "themes"))
+
+g:setTheme("basetheme.lua")
