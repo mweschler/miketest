@@ -7,6 +7,6 @@ function gameloop ()
 	while gRunning do
 		coroutine.yield()
 		Audio.update()
-		player:update()
+		--player:update()
 	end
 end

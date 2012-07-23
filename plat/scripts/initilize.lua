@@ -46,3 +46,14 @@ MOAISim.pushRenderPass(gEntityLayer)
 player:addToLayer(gEntityLayer)
 player:addToWorld(Level.getCurrentWorld())
 gEntityLayer:setBox2DWorld(Level.getCurrentWorld())
+
+--[[GUI test area]]
+local world = Level.getCurrentWorld()
+world:stop()
+
+local gui = require "gui\\gui"
+local filesystem = require "gui/support/filesystem"
+local inputconstants = require "gui/support/inputconstants"
+
+g = gui.GUI(DEVICE_WIDTH, DEVICE_HEIGHT)
+
