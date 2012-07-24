@@ -49,12 +49,14 @@ player:addToWorld(Level.getCurrentWorld())
 gEntityLayer:setBox2DWorld(Level.getCurrentWorld())
 
 --[[GUI test area]]
+print "\n\n === GUI TESTING ===\n\n\n"
 local world = Level.getCurrentWorld()
 world:stop()
 
 local gui = require "gui\\gui"
 local filesystem = require "gui/support/filesystem"
 local inputconstants = require "gui/support/inputconstants"
+local resources = require "gui/support/resources"
 
 g = gui.GUI(DEVICE_WIDTH, DEVICE_HEIGHT)
 LayerManager.addLayer("gui", 9000, g:layer())
@@ -65,3 +67,13 @@ g:addToResourcePath(filesystem.pathJoin("resources", "media"))
 g:addToResourcePath(filesystem.pathJoin("resources", "themes"))
 
 g:setTheme("basetheme.lua")
+g:setCurrTextStyle("default")
+local window = g:createWindow()
+window:setPos(10,10)
+window:setDim(25,20)
+window:setBackgroundImage(resources.getPath("background.png"))
+local button = g:createButton()
+
+window:addChild(button)
+button:setPos(1,1)
+button:setDim(5,5)
