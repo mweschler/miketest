@@ -2,11 +2,13 @@ require "scripts/Player"
 Level = require "scripts/Level"
 Audio = require "scripts/LabAudio"
 LayerManager = require "scripts/layermgr"
+Input = require "scripts/LabInput"
 
 print("Begin Initilization")
 
 Audio.initilize()
 Audio.loadSound("effects", "dummy", "sounds/mono16.wav")
+Input.init()
 
 --[[gGameLayer = MOAILayer.new()
 gGameLayer:setViewport(viewport)
