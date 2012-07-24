@@ -5,29 +5,17 @@ LayerManager = require "scripts/layermgr"
 
 print("Begin Initilization")
 
+--Intilize Audio
 Audio.initilize()
 Audio.loadSound("effects", "dummy", "sounds/mono16.wav")
 
---[[gGameLayer = MOAILayer.new()
-gGameLayer:setViewport(viewport)
-MOAISim.pushRenderPass(gGameLayer)]]
-
---dofile("scripts/blank_level.lua")
-
---gWorldGrid = dofile("levels/blank.lua")
-
+--setup tileset for level
 gWorldTile = MOAITileDeck2D.new()
 gWorldTile:setTexture("textures/tiles.png")
 gWorldTile:setSize(2,1)
 gWorldTile:setRect ( -0.5, 0.5, 0.5, -0.5 )
 
---[[
-gWorldProp = MOAIProp2D.new()
-gWorldProp:setDeck(gWorldTile)
-gWorldProp:setGrid(gWorldGrid)
-gWorldProp:setLoc(-16,-9)
-gGameLayer:insertProp(gWorldProp)
-]]
+-load level
 print("Loading level")
 level = Level.new()
 level:setTile(5,5,1)
@@ -35,7 +23,7 @@ level:setTile(6,5,1)
 level:setTile(7,5,1)
 Level.load(level, gWorldTile)
 
-
+--create the player and set his physics up
 print("Creating Player")
 player = Player.new()
 ptex = MOAITexture.new ()

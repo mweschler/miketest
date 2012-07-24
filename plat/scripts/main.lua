@@ -6,6 +6,7 @@ ASPECT_HEIGHT = 9
 
 print("Initilizing window and viewpot")
 
+--setup window and perserve aspect ratio
 MOAISim.openWindow("Platformer", DEVICE_WIDTH, DEVICE_HEIGHT)
 local gameAspect = ASPECT_HEIGHT / ASPECT_WIDTH
 local realAspect = DEVICE_HEIGHT / DEVICE_WIDTH
@@ -33,27 +34,20 @@ if viewHeight < DEVICE_HEIGHT then
 	viewOffsetY = (DEVICE_HEIGHT - viewHeight) * 0.5
 end
 	
---viewWidth = SCREEN_DEFAULT_WIDTH
---viewHeight = (ASPECT_HEIGHT / ASPECT_WIDTH) * SCREEN_DEFAULT_WIDTH
---viewOffset = (SCREEN_DEFAULT_HEIGHT - viewHeight)
 print("vWidth =",viewWidth)
 print("vHeight=", viewHeight)
 print("offsetX =",viewOffsetX)
 print("offsetY =", viewOffsetY)
 
-
+--create viewport and set scale
 viewport = MOAIViewport.new()
 viewport:setSize(viewOffsetX,viewOffsetY,viewWidth + viewOffsetX, viewHeight + viewOffsetY)
---viewport:setOffset(0,viewOffset)
 viewport:setScale(32,18)
 
---MOAISim.enterFullscreenMode()
-
-
+--Do initilization
 dofile("scripts/initilize.lua")
 
---dofile("scripts/boxtest.lua")
-
+--start the main game loop
 print("Starting main gameloop")
 mainthread = MOAIThread.new()
 mainthread:run(gameloop)
