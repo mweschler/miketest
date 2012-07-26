@@ -15,7 +15,7 @@ gWorldTile:setTexture("textures/tiles.png")
 gWorldTile:setSize(2,1)
 gWorldTile:setRect ( -0.5, 0.5, 0.5, -0.5 )
 
--load level
+--load level
 print("Loading level")
 level = Level.new()
 level:setTile(5,5,1)
