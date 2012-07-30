@@ -4,10 +4,15 @@ local _Input = {}
 
 local callbacks = {}
 local keyCallbacks = {}
+local pointerCallbacks = {}
+local lclickCallbacks = {}
+local rclickCallbacks = {}
 
 local CB_TYPE = {}
 CB_TYPE.KEYBOARD = "keyboard"
-CB_TYPE.MOUSE = "mouse"
+CB_TYPE.POINTER = "pointer"
+CB_TYPE.LCLICK = "lclick"
+CB_TYPE.RCLICK = "rclick"
 
 -- Helper Functions
 local function _createCallbackData()
@@ -20,13 +25,28 @@ local function _createCallbackData()
 	return cb
 end
 
-local function _registerCallback(cb)
+local function _getTypeTable(cbType)
 	local ctable = nil
-	if cb.type == CB_TYPE.KEYBOARD then
+	if cbType == CB_TYPE.KEYBOARD then
 		ctable = keyCallbacks
+	end
+	if cbType == CB_TYPE.POINTER then
+		ctable = pointerCallbacks
+	end
+	if cbType == CB_TYPE.LCLICK then
+		ctable = lclickCallbacks
+	end
+	if cbType == CB_TYPE.RCLICK then
+		ctable = rclickCallbacks
 	end
 	
 	assert (ctable ~= nil, "No appropriate callback table found")
+	
+	return ctable
+end
+
+local function _registerCallback(cb)
+	local ctable = _getTypeTable(cb.type)
 	
 	local added = false
 	
@@ -62,12 +82,8 @@ local function _multiRegister(inputType, name, priority, func)
 end
 
 local function _handleCallback(cbType, ...)
-	local cbTable = nil
-	if cbType == CB_TYPE.KEYBOARD then
-		cbTable = keyCallbacks
-	end
+	local cbTable = _getTypeTable(cbType) 
 	
-	assert (cbTable ~= nil, "No appropriate callback table found")
 	local data = {}
 	
 	for i,v in ipairs(arg) do
@@ -81,6 +97,18 @@ end
 
 local function _handleKeyboard(key, down)
 	_handleCallback(CB_TYPE.KEYBOARD, key, down)
+end
+
+local function _handlePointer( x, y)
+	_handleCallback(CB_TYPE.POINTER, x, y)
+end
+
+local function _handleLClick(down)
+	_handleCallback(CB_TYPE.LCLICK, down)
+end
+
+local function _handleRClick(down)
+	_handleCallback(CB_TYPE.RCLICK, down)
 end
 
 
@@ -97,6 +125,18 @@ end
 --pushes a keyboard callback at the lowest priority
 function _Input.pushKeyCallback(name, func)
 	_multiRegister(CB_TYPE.KEYBOARD, name, #keyCallbacks + 1, func)
+end
+
+function _Input.registerPointerCallback(name, priority, func)
+	_multiRegister(CB_TYPE.POINTER, name, priority, func)
+end
+
+function _Input.registerLClickCallback(name, priority, func)
+	_multiRegister(CB_TYPE.LCLICK, name, priority, func)
+end
+
+function _Input.regitstRClickCallback(name, priority, func)
+	_multiRegister(CB_TYPE.RCLICK, name, priority, func)
 end
 
 --Clears a callback from the list by name
@@ -128,6 +168,9 @@ end
 --Initilizes the Input system
 function _Input.init()
 	MOAIInputMgr.device.keyboard:setCallback(_handleKeyboard)
+	MOAIInputMgr.device.pointer:setCallback(_handlePointer)
+	MOAIInputMgr.device.mouseLeft:setCallback(_handleLClick)
+	MOAIInputMgr.device.mouseRight:setCallback(_handleRClick)
 end
 
 
