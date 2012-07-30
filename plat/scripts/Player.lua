@@ -4,31 +4,34 @@ local JUMP_STRENGTH = 10
 
 Player = {}
 
+
+
 function Player.new()
 	o = GameObject.new()
 	o.baseUpdate = o.update
 	local playerBody
 	local playerFixture
+	local keys = {}
 	
 	o.update = function(self)
 		assert(playerBody)
 		local velX, velY = playerBody:getLinearVelocity()
 	
-		if MOAIInputMgr.device.keyboard:keyIsDown(97) then --A
+		if keys[97] == true then --A
 			self.X = self.X - 0.5
 			if velX > (MAX_VELOCITY * -1) then
 				playerBody:applyLinearImpulse(-1,0)
 			end
 		end
 		
-		if MOAIInputMgr.device.keyboard:keyIsDown(100) then --D
+		if keys[100] == true then --D
 			self.X = self.X + 0.5
 			if velX < MAX_VELOCITY then
 				playerBody:applyLinearImpulse(1,0)
 			end
 		end
 		
-		if MOAIInputMgr.device.keyboard:keyIsDown(119) then --W
+		if keys[119] == true then --W
 			self.Y = self.Y + 0.5
 			if velY == 0 then
 				playerBody:applyLinearImpulse(0,JUMP_STRENGTH)
@@ -36,10 +39,12 @@ function Player.new()
 			end
 		end
 		
-		if MOAIInputMgr.device.keyboard:keyIsDown(115) then --S
+		if keys[115] == true then --S
 			--guy:applyLinearImpulse(0,1)
 			self.Y = self.Y - 0.5
 		end
+		
+		
 		--print(self.X, self.Y)
 		--self:baseUpdate()
 	end
@@ -55,6 +60,14 @@ function Player.new()
 		
 		self.prop:setParent(playerBody)
 	end
+	
+	local function _keyboard(data)
+		local key = data[1]
+		local down = data[2]
+		keys[key] = down
+	end
+	
+	Input.pushKeyCallback("player", _keyboard)
 	
 	return o
 end
