@@ -2,12 +2,14 @@ require "scripts/Player"
 Level = require "scripts/Level"
 Audio = require "scripts/LabAudio"
 LayerManager = require "scripts/layermgr"
+Input = require "scripts/LabInput"
 
 print("Begin Initilization")
 
 --Intilize Audio
 Audio.initilize()
 Audio.loadSound("effects", "dummy", "sounds/mono16.wav")
+Input.init()
 
 --setup tileset for level
 gWorldTile = MOAITileDeck2D.new()
