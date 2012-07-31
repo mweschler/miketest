@@ -67,6 +67,8 @@ local button = g:createButton()
 window:addChild(button)
 button:setPos(1,1)
 button:setDim(5,5)
+button:setText("Test")
+button:registerEventHandler(button.EVENT_BUTTON_CLICK, nil, function() print "CLICKED" end)
 
 function guiKeyboard(data)
 	local key = data[1]
@@ -78,5 +80,23 @@ function guiKeyboard(data)
 	end
 end
 
+function guiPointer(data)
+	local x = data[1]
+	local y = data[2]
+	
+	g:injectMouseMove(x,y)
+end
+
+function guiLeft(data)
+	local down = data[1]
+	if down then
+		g:injectMouseButtonDown(inputconstants.LEFT_MOUSE_BUTTON)
+	else
+		g:injectMouseButtonUp(inputconstants.LEFT_MOUSE_BUTTON)
+	end
+end
+
 Input.registerKeyCallback("guiKey", 5, guiKeyboard)
+Input.registerPointerCallback("guiPoint", 5, guiPointer)
+Input.registerLClickCallback("guiLC", 5, guiLeft)
 
