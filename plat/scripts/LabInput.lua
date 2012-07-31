@@ -120,7 +120,7 @@ end
 
 --registers a new keybaord callback
 function _Input.registerKeyCallback(name, priority, func)
-	_multiRegister(CB_TYPE.KEYBOARD, name, pripority, func)
+	_multiRegister(CB_TYPE.KEYBOARD, name, priority, func)
 end
 
 --pushes a keyboard callback at the lowest priority
