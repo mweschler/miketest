@@ -64,7 +64,8 @@ local function _registerCallback(cb)
 end
 
 local function _multiRegister(inputType, name, priority, func)
-	assert (priority ~= nil and func ~= nil)
+	assert (priority ~= nil , "priority cannot be nil")
+	assert (func ~= nil, "func cannot be nil")
 	
 	local cfunc = callbacks[name]
 	if cfunc == nil then
@@ -119,7 +120,7 @@ end
 
 --registers a new keybaord callback
 function _Input.registerKeyCallback(name, priority, func)
-	_multiRegister(CB_TYPE.KEYBOARD, name, pripority, func)
+	_multiRegister(CB_TYPE.KEYBOARD, name, priority, func)
 end
 
 --pushes a keyboard callback at the lowest priority
