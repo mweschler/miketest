@@ -1,6 +1,7 @@
 package.path = package.path .. ";.\\scripts\\?;.\\scripts\\?.lua"
 
-require "gameloop"
+require "scripts/gameloop"
+
 DEVICE_WIDTH = 1280
 DEVICE_HEIGHT = 720
 ASPECT_WIDTH = 16

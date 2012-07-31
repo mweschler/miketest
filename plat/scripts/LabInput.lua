@@ -3,6 +3,7 @@
 local _Input = {}
 
 local callbacks = {}
+local paused = {}
 local keyCallbacks = {}
 local pointerCallbacks = {}
 local lclickCallbacks = {}
@@ -150,12 +151,7 @@ function _Input.clearCallback(name)
 		return
 	end
 	
-	local cbTable = nil
-	if cb.type == CB_TYPE.KEYBOARD then
-		cbTable = keyCallbacks
-	end
-	
-	assert (cbTable ~= nil, "could not find appropriate callback table")
+	local cbTable = _getTypeTable(cb.type)
 	
 	for i, v in ipairs(cbTable) do
 		if v.name == name then
@@ -164,6 +160,67 @@ function _Input.clearCallback(name)
 	end
 	
 	callbacks[name] = nil
+end
+
+function _Input.pauseCallback(name)
+	if type(name) ~= 'string' then
+		error("name of callback must be specified", 2)
+	end
+	
+	local cb = callbacks[name]
+	if cb == nil then
+		MOAILogMgr.log("Callback with name \"" .. name .. "\" not found. Doing nothing\n")
+		return
+	end
+	
+	if paused[name] ~= nil then
+		MOAILogMgr.log("Attmpted to pause already paused callback with name \"" .. name .."\"")
+		return
+	end
+	
+	local cbTable = _getTypeTable(cb.type)
+	
+	for i, v in ipairs(cbTable) do
+		if v.name == name then
+			table.remove(cbTable,i)
+		end
+	end
+	
+	paused[name] = cb
+end
+
+function _Input.resumeCallback(name)
+	if type(name) ~= 'string' then
+		error("name of callback must be specified", 2)
+	end
+	
+	local cb = callbacks[name]
+	if cb == nil then
+		MOAILogMgr.log("Callback with name \"" .. name .. "\" not found. Doing nothing\n")
+		return
+	end
+	
+	if paused[name] == nil then
+		MOAILogMgr.log("Attempted to resume callback that was not paused with name \"" .. name "\"")
+		return
+	end
+	
+	local cbTable = _getTypeTable(cb.type)
+	
+	local added  = false
+	for i,v in ipairs(cbTable) do
+		if v.priority < cb.priority then
+			table.insert(cbTable, i, cb)
+			added = true
+			break
+		end
+	end
+	
+	if not added then
+		table.insert(cbTable, #cbTable + 1, cb)
+	end
+	
+	paused[name] = nil
 end
 
 --Initilizes the Input system
