@@ -67,3 +67,15 @@ local button = g:createButton()
 window:addChild(button)
 button:setPos(1,1)
 button:setDim(5,5)
+
+function guiKeyboard(data)
+	local key = data[1]
+	local down = data[2]
+	if down then
+		g:injectKeyDown(key)
+	else
+		g:injectKeyUp(key)
+	end
+end
+
+Input.registerKeyCallback("guiKey", 5, guiKeyboard)

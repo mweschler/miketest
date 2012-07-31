@@ -64,7 +64,8 @@ local function _registerCallback(cb)
 end
 
 local function _multiRegister(inputType, name, priority, func)
-	assert (priority ~= nil and func ~= nil)
+	assert (priority ~= nil , "priority cannot be nil")
+	assert (func ~= nil, "func cannot be nil")
 	
 	local cfunc = callbacks[name]
 	if cfunc == nil then
