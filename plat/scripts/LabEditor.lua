@@ -14,6 +14,7 @@ local isVisible = false
 local currentState = -1
 local topGuiLayer = -1
 
+
 --initilizes the editor *references outside variables*
 function Editor.init(screenWidth, screenHeight)
 	--parameter checking
@@ -39,6 +40,8 @@ function Editor.init(screenWidth, screenHeight)
 	Editor._gui:addToResourcePath(filesystem.pathJoin("resources", "media"))
 	Editor._gui:addToResourcePath(filesystem.pathJoin("resources", "themes"))
 	
+	--[[ Need to setup a layouts for gui  ]]
+	
 	--setup input controls
 	
 	dofile('scripts/LabEditorInput.lua') --create input callback functions
@@ -47,6 +50,7 @@ function Editor.init(screenWidth, screenHeight)
 	Input.registerPointerCallback("editorPointer", 5, EditorPointer)
 	Input.registerLClickCallback("editorLClick", 5, EditorLClick)
 	Input.registerRClickCallback("editorRClick", 5, EditorRClick)
+	
 	
 	isReady = true
 end
