@@ -5,7 +5,6 @@ LayerManager = require "scripts/layermgr"
 Input = require "scripts/LabInput"
 Editor = require ('LabEditor')
 
-print (DEVICE_WIDTH, DEVICE_HEIGHT)
 Editor.init(DEVICE_WIDTH, DEVICE_HEIGHT)
 
 print("Begin Initilization")
