@@ -137,7 +137,7 @@ function _Input.registerLClickCallback(name, priority, func)
 	_multiRegister(CB_TYPE.LCLICK, name, priority, func)
 end
 
-function _Input.regitstRClickCallback(name, priority, func)
+function _Input.registerRClickCallback(name, priority, func)
 	_multiRegister(CB_TYPE.RCLICK, name, priority, func)
 end
 
