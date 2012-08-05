@@ -17,7 +17,7 @@ local topGuiLayer = -1
 --initilizes the editor *references outside variables*
 function Editor.init(screenWidth, screenHeight)
 	--parameter checking
-	if screenWidth ~= 'number' and screenHeight ~= 'number' then
+	if type(screenWidth) ~= 'number' and type(screenHeight) ~= 'number' then
 		error("screenWidth and screenHeight must both be specified", 2)
 	end
 	
@@ -41,6 +41,12 @@ function Editor.init(screenWidth, screenHeight)
 	
 	--setup input controls
 	
+	dofile('scripts/LabEditorInput.lua') --create input callback functions
+	
+	Input.registerKeyCallback("editorKey", 5, EditorKey)
+	Input.registerPointerCallback("editorPointer", 5, EditorPointer)
+	Input.registerLClickCallback("editorLClick", 5, EditorLClick)
+	Input.registerRClickCallback("editorRClick", 5, EditorRClick)
 	
 	isReady = true
 end
@@ -59,7 +65,7 @@ function Editor.hide()
 		return
 	end
 	
-	LAYERMANAGER.hideLayer(BASE_LAYER)
+	LayerManager.hideLayer(BASE_LAYER)
 	isVisible = false
 end
 
