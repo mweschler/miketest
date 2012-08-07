@@ -118,8 +118,13 @@ function _M.hideLayer(name)
 	end
 
 	if (false == flag) then return end
+	
+	local moaiLayers = {}
+	for i, v in ipairs(visibleLayers) do
+		moaiLayers[#moaiLayers + 1] = v.moaiLayer
+	end
 
-	refreshRenderTable(visibleLayers)
+	refreshRenderTable(moaiLayers)
 end
 
 return _M

@@ -3,9 +3,7 @@ Level = require "scripts/Level"
 Audio = require "scripts/LabAudio"
 LayerManager = require "scripts/layermgr"
 Input = require "scripts/LabInput"
-Editor = require ('LabEditor')
-
-Editor.init(DEVICE_WIDTH, DEVICE_HEIGHT)
+Editor = require ('Editor.Editor')
 
 print("Begin Initilization")
 
@@ -40,3 +38,7 @@ LayerManager.addLayer("entity", 2, gEntityLayer)
 player:addToLayer(gEntityLayer)
 player:addToWorld(Level.getCurrentWorld())
 gEntityLayer:setBox2DWorld(Level.getCurrentWorld())
+
+--Editor testing intilization
+Editor.init(DEVICE_WIDTH, DEVICE_HEIGHT)
+--Editor.show()

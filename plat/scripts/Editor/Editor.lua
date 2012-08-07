@@ -44,7 +44,7 @@ function Editor.init(screenWidth, screenHeight)
 	
 	--setup input controls
 	
-	dofile('scripts/LabEditorInput.lua') --create input callback functions
+	require('Editor.Input') --create input callback functions
 	
 	Input.registerKeyCallback("editorKey", 5, EditorKey)
 	Input.registerPointerCallback("editorPointer", 5, EditorPointer)
