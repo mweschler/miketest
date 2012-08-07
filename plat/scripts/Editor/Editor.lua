@@ -5,14 +5,18 @@ local inputconstants = require ('gui.support.inputconstants')
 local resources = require ('gui.support.resources')
 
 local Editor = {}
+Editor.Input = require('Editor.Input')
 
+-- constants
 local MIN_EDITOR_LAYER = 9000
 local BASE_LAYER = "editorBase"
 
+--local private data
 local isReady = false
 local isVisible = false
 local currentState = -1
 local topGuiLayer = -1
+local screenDimensions = {}
 
 
 --initilizes the editor *references outside variables*
@@ -25,6 +29,9 @@ function Editor.init(screenWidth, screenHeight)
 	if isReady then
 		error("cannot initilize editor once previously initilized", 2)
 	end
+	
+	screenDimensions.width = screenWidth
+	screenDimensions.height = screenHeight
 	
 	--setup states
 	
@@ -44,12 +51,7 @@ function Editor.init(screenWidth, screenHeight)
 	
 	--setup input controls
 	
-	require('Editor.Input') --create input callback functions
-	
-	Input.registerKeyCallback("editorKey", 5, EditorKey)
-	Input.registerPointerCallback("editorPointer", 5, EditorPointer)
-	Input.registerLClickCallback("editorLClick", 5, EditorLClick)
-	Input.registerRClickCallback("editorRClick", 5, EditorRClick)
+	Editor.Input.registerSet(Editor.Input.masterSet)
 	
 	
 	isReady = true
@@ -79,6 +81,14 @@ end
 
 function Editor.isReady()
 	return isReady
+end
+
+function Editor.getScreenWidth()
+	return screenDimensions.width
+end
+
+function Editor.getScreenHeight()
+	return screenDimensions.height
 end
 
 return Editor
