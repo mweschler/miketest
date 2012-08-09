@@ -62,6 +62,7 @@ function Editor.show()
 		return
 	end
 	
+	Editor.Input.resumeAll()
 	LayerManager.showLayer(BASE_LAYER)
 	isVisible = true
 end
@@ -71,6 +72,7 @@ function Editor.hide()
 		return
 	end
 	
+	Editor.Input.pauseAll()
 	LayerManager.hideLayer(BASE_LAYER)
 	isVisible = false
 end

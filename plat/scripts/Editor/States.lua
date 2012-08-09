@@ -4,7 +4,7 @@ function EditorStateData.new(stateName)
 	local data= {}
 	data.name = stateName
 	data.gui = nil
-	data.input = nil
+	data.inputset = nil
 end
 
 
